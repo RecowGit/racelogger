@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Logserver Web Interface</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Logserver</h1>
+      <p>Willkommen zum Logserver Webinterface</p>
+    </header>
+
+    <main>
+      <h2>Dateien</h2>
+      <button id="refreshButton">Dateien aktualisieren</button>
+      <div id="fileList"></div>
+    </main>
+
+    <footer>
+      <p>&copy; 2025 Logserver. Alle Rechte vorbehalten.</p>
+    </footer>
+  </div>
+
+  <script>
+    document.getElementById('refreshButton').addEventListener('click', refreshFileList);
+
+    function refreshFileList() {
+      fetch('/list')
+        .then(response => response.json())
+        .then(data => {
+          const fileListElement = document.getElementById('fileList');
+          fileListElement.innerHTML = '';
+          if (data.length === 0) {
+            fileListElement.innerHTML = '<p>Keine Dateien gefunden.</p>';
+          } else {
+            data.forEach(file => {
+              const fileElement = document.createElement('div');
+              fileElement.className = 'file';
+              fileElement.innerHTML = `<p><strong>${file.name}</strong> - ${file.size} Bytes</p>`;
+              fileListElement.appendChild(fileElement);
+            });
+          }
+        })
+        .catch(error => console.error('Fehler beim Laden der Dateiliste:', error));
+    }
+  </script>
+</body>
+</html>

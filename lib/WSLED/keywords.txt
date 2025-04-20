@@ -1,0 +1,35 @@
+#######################################
+# Syntaxfarben für die WSLED Library
+#######################################
+
+# Klassenname (wird in der IDE hervorgehoben)
+WSLED	KEYWORD1
+
+# Methoden (werden in der IDE als Funktionen angezeigt)
+begin	KEYWORD2
+on	KEYWORD2
+off	KEYWORD2
+blink	KEYWORD2
+tripleBlink	KEYWORD2
+stopBlink	KEYWORD2
+setBrightness	KEYWORD2
+update	KEYWORD2
+
+# Vordefinierte Farbkonstanten (werden als Konstanten angezeigt)
+RED	LITERAL1
+GREEN	LITERAL1
+BLUE	LITERAL1
+WHITE	LITERAL1
+YELLOW	LITERAL1
+PURPLE	LITERAL1
+CYAN	LITERAL1
+ORANGE	LITERAL1
+
+#######################################
+# Formatierungshinweise:
+# - KEYWORD1 = Klassenname (blau in der IDE)
+# - KEYWORD2 = Methoden (braun in der IDE)
+# - LITERAL1 = Konstanten (orange in der IDE)
+# - Jede Zeile enthält: <Wort>TAB<Kategorie>
+# - Kommentare beginnen mit #
+#######################################
