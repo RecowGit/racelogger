@@ -11,6 +11,8 @@ extern WSLED wsled;
 extern SPIClass hspi;            // HSPI-Instanz für SD-Karte
 extern SdFs sd;                  // SdFat-FS für SD-Zugriff
 
+extern bool sdInitialized;
+
 // Webserver und Steuerung
 extern AsyncWebServer server;
 extern bool serverRunning;

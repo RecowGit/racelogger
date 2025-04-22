@@ -5,7 +5,7 @@
 // -------------------------
 // Globale Objekte und Variablen
 // -------------------------
-SPIClass hspi(HSPI); // Definition des HSPI-Objekts
+// SPIClass hspi(HSPI); // Definition des HSPI-Objekts
 
 SdFs sd;            // SD-Karten-Objekt (SdFat)
 FsFile logFile;     // Logdatei
@@ -258,17 +258,17 @@ void flushAllBuffers() {
 // öffnet die Logdatei und schreibt den Header.
 // Anschließend wird der Logging-Task auf Core 1 gestartet.
 void logger_setup() {
-  Serial.begin(115200);
+  // Serial.begin(115200);
 
   pinMode(switchPin, INPUT_PULLUP);
   pinMode(ledPin, OUTPUT);
   digitalWrite(ledPin, LOW);
 
-  hspi.begin(HSPI_SCK, HSPI_MISO, HSPI_MOSI);
+  // hspi.begin(HSPI_SCK, HSPI_MISO, HSPI_MOSI);
 
-  if (!sd.begin(SD_CONFIG)) {
-    sd.initErrorHalt(&Serial);
-  }
+  // if (!sd.begin(SD_CONFIG)) {
+  //   sd.initErrorHalt(&Serial);
+  // }
 
   String fileName = createUniqueFileName();
   Serial.print("Starte Logvorgang: ");

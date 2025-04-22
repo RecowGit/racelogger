@@ -6,19 +6,19 @@
 #include <SdFat.h>
 #include "racebox.h"
 
-// -------------------------
-// HSPI-Konfiguration und SD-Einstellungen
-// -------------------------
-extern SPIClass hspi;  // Definition in logger.cpp
+// // -------------------------
+// // HSPI-Konfiguration und SD-Einstellungen
+// // -------------------------
+// extern SPIClass hspi;  // Definition in logger.cpp
 
-// SD-Pin-Konfiguration
-const int SD_CS    = 13;
-const int HSPI_SCK = 14;
-const int HSPI_MISO= 2;
-const int HSPI_MOSI= 15;
+// // SD-Pin-Konfiguration
+// const int SD_CS    = 13;
+// const int HSPI_SCK = 14;
+// const int HSPI_MISO= 2;
+// const int HSPI_MOSI= 15;
 
-#define SD_CONFIG SdSpiConfig(SD_CS, DEDICATED_SPI, SD_SCK_MHZ(16), &hspi)
-#define SD_FAT_TYPE 3  // 1 = FAT16/FAT32, 2 = exFAT, 3 = beide
+// #define SD_CONFIG SdSpiConfig(SD_CS, DEDICATED_SPI, SD_SCK_MHZ(16), &hspi)
+// #define SD_FAT_TYPE 3  // 1 = FAT16/FAT32, 2 = exFAT, 3 = beide
 
 // -------------------------
 // Hardware-Pin-Konfiguration

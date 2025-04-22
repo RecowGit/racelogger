@@ -10,6 +10,22 @@
 #include "logserver.h"
 #include <ESPAsyncWebServer.h>
 
+SPIClass hspi(HSPI); // Definition des HSPI-Objekts
+
+// -------------------------
+// HSPI-Konfiguration und SD-Einstellungen
+// -------------------------
+// extern SPIClass hspi;  // Definition in logger.cpp
+
+// SD-Pin-Konfiguration
+const int SD_CS    = 13;
+const int HSPI_SCK = 14;
+const int HSPI_MISO= 2;
+const int HSPI_MOSI= 15;
+
+#define SD_CONFIG SdSpiConfig(SD_CS, DEDICATED_SPI, SD_SCK_MHZ(16), &hspi)
+#define SD_FAT_TYPE 3  // 1 = FAT16/FAT32, 2 = exFAT, 3 = beide
+
 HardwareSerial uart(2);
 EasyTransfer ETin, ETout; 
 
@@ -139,6 +155,12 @@ void setup() {
   hspi.begin(HSPI_SCK, HSPI_MISO, HSPI_MOSI);
   ETin.begin(details(rxdata), &uart);
   ETout.begin(details(txdata), &uart);
+
+  hspi.begin(HSPI_SCK, HSPI_MISO, HSPI_MOSI);
+
+  if (!sd.begin(SD_CONFIG)) {
+    sd.initErrorHalt(&Serial);
+  }
 
   logger_setup();
   logServerSetup();

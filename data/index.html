@@ -1,51 +1,83 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Logserver Web Interface</title>
-  <link rel="stylesheet" href="/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RaceLog Server</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
     <header>
-      <h1>Logserver</h1>
-      <p>Willkommen zum Logserver Webinterface</p>
+        <img src="logo.png" alt="RaceLog Server" class="header-image">
     </header>
 
-    <main>
-      <h2>Dateien</h2>
-      <button id="refreshButton">Dateien aktualisieren</button>
-      <div id="fileList"></div>
-    </main>
+    <div class="container">
+        <h2>Dateimanager</h2>
+        <button id="refreshButton" class="refresh-btn">Dateiliste aktualisieren</button>
+        <div id="fileList" class="file-list"></div>
+    </div>
 
-    <footer>
-      <p>&copy; 2025 Logserver. Alle Rechte vorbehalten.</p>
-    </footer>
-  </div>
+    <script>
+        document.getElementById('refreshButton').addEventListener('click', refreshFileList);
 
-  <script>
-    document.getElementById('refreshButton').addEventListener('click', refreshFileList);
+        function refreshFileList() {
+          fetch('/list')
+            .then(response => response.json())
+            .then(data => {
+              const fileListElement = document.getElementById('fileList');
+              fileListElement.innerHTML = '';
 
-    function refreshFileList() {
-      fetch('/list')
-        .then(response => response.json())
-        .then(data => {
-          const fileListElement = document.getElementById('fileList');
-          fileListElement.innerHTML = '';
-          if (data.length === 0) {
-            fileListElement.innerHTML = '<p>Keine Dateien gefunden.</p>';
-          } else {
-            data.forEach(file => {
-              const fileElement = document.createElement('div');
-              fileElement.className = 'file';
-              fileElement.innerHTML = `<p><strong>${file.name}</strong> - ${file.size} Bytes</p>`;
-              fileListElement.appendChild(fileElement);
-            });
-          }
-        })
-        .catch(error => console.error('Fehler beim Laden der Dateiliste:', error));
-    }
-  </script>
+              if (data.length === 0) {
+                fileListElement.innerHTML = '<p>Keine Dateien gefunden.</p>';
+              } else {
+                data.forEach(file => {
+                  const fileElement = document.createElement('div');
+                  fileElement.className = 'file';
+
+                  fileElement.innerHTML = `
+                    <p><strong>${file.name}</strong> - ${file.size} Bytes</p>
+                    <div class="button-group">
+                      <button class="downloadButton" data-file="${file.name}">Herunterladen</button>
+                      <button class="deleteButton" data-file="${file.name}">Löschen</button>
+                    </div>
+                  `;
+
+                  fileListElement.appendChild(fileElement);
+                });
+
+                document.querySelectorAll('.downloadButton').forEach(btn => {
+                  btn.addEventListener('click', () => {
+                    const fileName = btn.getAttribute('data-file');
+                    window.location.href = '/download?file=' + encodeURIComponent(fileName);
+                  });
+                });
+
+                document.querySelectorAll('.deleteButton').forEach(btn => {
+                  btn.addEventListener('click', () => {
+                    const fileName = btn.getAttribute('data-file');
+                    if (confirm(`Möchten Sie "${fileName}" wirklich löschen?`)) {
+                      fetch('/delete?file=' + encodeURIComponent(fileName), { method: 'DELETE' })
+                        .then(response => response.json())
+                        .then(result => {
+                          if (result.status === 'ok') {
+                            refreshFileList();
+                          } else {
+                            alert('Löschen fehlgeschlagen');
+                          }
+                        })
+                        .catch(error => {
+                          console.error('Fehler beim Löschen:', error);
+                          alert('Fehler beim Löschen');
+                        });
+                    }
+                  });
+                });
+              }
+            })
+            .catch(error => console.error('Fehler beim Laden der Dateiliste:', error));
+        }
+
+        refreshFileList();
+    </script>
 </body>
 </html>

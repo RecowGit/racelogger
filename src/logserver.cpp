@@ -6,6 +6,7 @@
 #include <SPIFFS.h>
 #include "WSLED.h"
 #include <ESPAsyncWebServer.h>
+#include "logger.h"
 
 // AP-Konfiguration
 static const char* apSSID = "racelog";
@@ -142,10 +143,12 @@ static void startServer() {
 
     server.serveStatic("/index.html", SPIFFS, "/index.html");
     server.serveStatic("/style.css", SPIFFS, "/style.css");
+    server.serveStatic("/header.png", SPIFFS, "/header.png");
+    server.serveStatic("/logo.png", SPIFFS, "/logo.png");
 
     server.begin();
-    Serial.println("AP gestartet: " + String(apSSID));
-    Serial.println("IP: " + WiFi.softAPIP().toString());
+    // Serial.println("AP gestartet: " + String(apSSID));
+    // Serial.println("IP: " + WiFi.softAPIP().toString());
     serverRunning = true;
     wsled.on(WSLED::GREEN);
 }
@@ -166,11 +169,11 @@ void logServerSetup() {
       Serial.println("SPIFFS mount failed");
       return;
     }
-    if (!sd.begin()) {
-      Serial.println("SD Card initialization failed!");
-      return;
+    // if (!sd.begin(SD_CONFIG)) {
+    //     Serial.println("SD Card initialization failed in WebInterface!");
+    //     return;
+    //   }
     }
-}
 
 void logServerLoop() {
     int reading = digitalRead(ServerSwitchPin);  // z.B. Pin 34
